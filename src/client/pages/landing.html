@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script type="module">
+        if (!localStorage.getItem('token')) {
+            window.location.href = '/src/client/pages/login.html';
+        }
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Your Kit - TAA Simulator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link href="../css/landing.css" rel="stylesheet">
+        <script type="module" src="../scripts/landing.ts"></script>
+
+    <script type="module" src="../main.ts"></script>
+
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <div class="header-section">
+            <div class="logo-container">
+                <div class="logo">
+                    <svg width="56" height="56" viewBox="0 0 100 100">
+                        <defs>
+                            <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#27ae60;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#229954;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        <rect width="100" height="100" rx="22" fill="url(#logoGradient)" />
+                        <text x="50" y="68" font-size="48" text-anchor="middle" fill="white"
+                            font-family="Arial, sans-serif" font-weight="bold">T</text>
+                    </svg>
+                </div>
+            </div>
+            <h1>Choose Your Project Kit</h1>
+            <p class="subtitle">Select the type of project you want to build and start creating amazing things with
+                Arduino</p>
+        </div>
+
+        <!-- Cards Container -->
+        <div class="cards-container">
+            <!-- House Kit Card -->
+            <div class="kit-card" data-kit="house">
+                <div class="kit-icon">🏠</div>
+                <h2>House Kit</h2>
+                <p class="kit-description">Build smart home automation systems with sensors, relays, and control modules
+                </p>
+                <ul class="kit-features">
+                    <li>Temperature & Humidity Sensors</li>
+                    <li>Relay Modules for Appliances</li>
+                    <li>Motion Detectors</li>
+                    <li>Smart Lighting Controls</li>
+                    <li>Door & Window Sensors</li>
+                </ul>
+                <button class="select-btn">
+                    <span>Select House Kit</span>
+                </button>
+            </div>
+
+            <!-- Car Kit Card -->
+            <div class="kit-card" data-kit="car">
+                <div class="kit-icon">🚗</div>
+                <h2>Tiny Car Kit</h2>
+                <p class="kit-description">Create automotive projects with motors, sensors, and control systems</p>
+                <ul class="kit-features">
+                    <li>DC Motors & Motor Drivers</li>
+                    <li>Ultrasonic Distance Sensors</li>
+                    <li>Line Following Sensors</li>
+                    <li>Servo Motors for Steering</li>
+                    <li>Speed Controllers</li>
+                </ul>
+                <button class="select-btn">
+                    <span>Select Car Kit</span>
+                </button>
+            </div>
+
+            <!-- Byte Kit Card -->
+            <div class="kit-card" data-kit="byte">
+                <div class="kit-icon">🏘️</div>
+                <h2>Byte Kit</h2>
+                <p class="kit-description">Explore digital electronics, data processing, and embedded programming
+                    projects</p>
+                <ul class="kit-features">
+                    <li>LCD & OLED Displays</li>
+                    <li>Memory & Storage Modules</li>
+                    <li>Communication Modules (WiFi/BT)</li>
+                    <li>Real-Time Clock (RTC)</li>
+                    <li>Data Logging Components</li>
+                </ul>
+                <button class="select-btn">
+                    <span>Select Byte Kit</span>
+                </button>
+            </div>
+
+            <!-- Normal/Standard Kit Card -->
+            <div class="kit-card" data-kit="normal">
+                <div class="kit-icon">🔧</div>
+                <h2>Standard Kit</h2>
+                <p class="kit-description">Access all available components for general-purpose robotics and electronics
+                </p>
+                <ul class="kit-features">
+                    <li>Complete Component Library</li>
+                    <li>All Motors & Wheels</li>
+                    <li>All Sensors & Modules</li>
+                    <li>Chassis & Structural Parts</li>
+                    <li>Full Arduino Ecosystem</li>
+                </ul>
+                <button class="select-btn highlighted">
+                    <span>Select Standard Kit</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Skip Section -->
+        <div class="skip-section">
+            <button class="skip-btn">
+                Skip and use Standard Kit →
+            </button>
+        </div>
+
+        <!-- Logout Section -->
+        <div class="logout-section">
+            <button class="logout-btn" id="logoutBtn">
+                🚪 Logout
+            </button>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="success-modal" id="successModal">
+        <div class="success-icon">✅</div>
+        <h2 class="success-title" id="successTitle">Kit Selected!</h2>
+        <p class="success-text">Redirecting to simulator...</p>
+    </div>
+
+
+</body>
+
+</html>

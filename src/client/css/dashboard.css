@@ -1,0 +1,258 @@
+/* Dashboard Styles - Simple Dashboard with Login and Signup */
+
+:root {
+    /* Light Mode Colors */
+    --primary-blue: #1a73e8;
+    --primary-blue-dark: #1557b0;
+    --surface-white: #ffffff;
+    --surface-gray: #f8f9fa;
+    --border-light: #e8eaed;
+    --text-primary: #202124;
+    --text-secondary: #5f6368;
+    
+    /* Dark Mode Colors */
+    --dark-bg: #0f0f0f;
+    --dark-surface: #1f1f1f;
+    --dark-border: #3c4043;
+    --dark-text-primary: #e8eaed;
+    --dark-text-secondary: #9aa0a6;
+    
+    /* Shadows */
+    --shadow-subtle: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    --shadow-medium: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    --shadow-strong: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+    --dark-shadow-subtle: 0 2px 8px rgba(0,0,0,0.4);
+    --dark-shadow-medium: 0 4px 16px rgba(0,0,0,0.5);
+    
+    /* Animation */
+    --ease-standard: cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+/* Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background: linear-gradient(135deg, #1c607f 0%, #306d8a 25%, #bcd0d9 50%, #fcd40a 75%, #1c607f 100%);
+    background-size: 400% 400%;
+    animation: gradientShift 15s ease infinite;
+    color: var(--text-primary);
+    transition: color 0.3s var(--ease-standard);
+    position: relative;
+}
+
+@keyframes gradientShift {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* Dark Mode */
+body.dark-mode {
+    background: linear-gradient(135deg, #1c607f 0%, #306d8a 25%, #bcd0d9 50%, #fcd40a 75%, #1c607f 100%);
+    background-size: 400% 400%;
+    animation: gradientShift 15s ease infinite;
+    color: var(--dark-text-primary);
+}
+
+/* Dashboard Container */
+.dashboard-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.dashboard-content {
+    width: 100%;
+    max-width: 500px;
+    text-align: center;
+    animation: fadeIn 0.5s var(--ease-standard);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Logo Section */
+.logo-section {
+    margin-bottom: 3rem;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+.app-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+    transition: color 0.3s var(--ease-standard);
+}
+
+body.dark-mode .app-title {
+    color: var(--dark-text-primary);
+}
+
+.app-subtitle {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+    transition: color 0.3s var(--ease-standard);
+}
+
+body.dark-mode .app-subtitle {
+    color: var(--dark-text-primary);
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* Buttons */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s var(--ease-standard);
+    text-decoration: none;
+    width: 100%;
+    box-shadow: var(--shadow-subtle);
+}
+
+.btn-primary {
+    background: var(--primary-blue);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: var(--primary-blue-dark);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-medium);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+.btn-secondary {
+    background: var(--surface-white);
+    color: var(--text-primary);
+    border: 2px solid var(--border-light);
+}
+
+body.dark-mode .btn-secondary {
+    background: var(--dark-surface);
+    color: var(--dark-text-primary);
+    border-color: var(--dark-border);
+}
+
+.btn-secondary:hover {
+    background: var(--surface-gray);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-medium);
+}
+
+body.dark-mode .btn-secondary:hover {
+    background: var(--dark-border);
+}
+
+.btn-secondary:active {
+    transform: translateY(0);
+}
+
+.btn-icon {
+    font-size: 1.25rem;
+}
+
+.btn-text {
+    font-size: 1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .dashboard-container {
+        padding: 1.5rem;
+    }
+    
+    .app-title {
+        font-size: 2rem;
+    }
+    
+    .app-subtitle {
+        font-size: 1rem;
+    }
+    
+    .btn {
+        padding: 0.875rem 1.5rem;
+        font-size: 0.9375rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .dashboard-container {
+        padding: 1rem;
+    }
+    
+    .logo-section {
+        margin-bottom: 2rem;
+    }
+    
+    .app-title {
+        font-size: 1.75rem;
+    }
+    
+    .app-subtitle {
+        font-size: 0.9375rem;
+    }
+}

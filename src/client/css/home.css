@@ -1,0 +1,108 @@
+/* Keep only essential variables and split screen functionality */
+
+/* ---------------------------------------------- variables need check -------------------------------------------- */
+:root {
+    --transition-fast: all 0.2s ease;
+    --transition-normal: all 0.3s ease;
+}
+
+/* Split Screen Styles - Keep these as they're functional */
+.main-container {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    max-width: 100vw;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+.simulator-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-width: 0;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+/* Code Editor Panel Styles */
+/* Purpose: Control visibility and animation of code editor panel */
+/* Used in: Code editor panel slide-in/slide-out animation */
+
+.code-editor-panel {
+    width: 0;
+    overflow: hidden;
+    display: none;                    /* Hidden by default */
+    flex-direction: column;
+    transition: all 0.3s ease;        /* Smooth slide animation */
+    position: relative;
+    z-index: 100;                     /* Ensure panel appears above canvas */
+}
+
+/* Code Editor Panel - Open State */
+/* Purpose: Show code editor panel when .open class is added */
+/* Used in: openCodeEditor() function adds this class to show panel */
+.code-editor-panel.open {
+    width: 50%;                       /* Panel takes 50% of screen width */
+    display: flex;                    /* Show panel with flexbox layout */
+    overflow: visible;                /* Allow content to be visible */
+}
+
+/* Loading Spinner - Keep for functionality */
+.loading-spinner {
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-top: 4px solid white;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Canvas specific styles */
+#renderCanvas {
+    transition: all 0.3s ease;
+}
+
+.side-panel {
+    transition: all 0.3s ease;
+}
+
+/* Responsive adjustments for code editor */
+@media (max-width: 1200px) {
+    .code-editor-panel.open {
+        width: 45%;
+    }
+}
+
+@media (max-width: 768px) {
+    .code-editor-panel.open {
+        width: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+        height: 100vh;
+    }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

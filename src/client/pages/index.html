@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TAA Simulator</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+  <link href="../css/style.css" rel="stylesheet" />
+  <link href="../css/home.css" rel="stylesheet" />
+  <link href="../css/wiring-style.css" rel="stylesheet" />
+  <link href="../css/style.css" rel="stylesheet" />
+
+
+</head>
+<body>
+
+  <div class="main-container">
+    <div class="simulator-panel">
+      <!-- Enhanced Loading Overlay -->
+      <div class="loading-overlay" id="loadingOverlay">
+        <div>
+          <div class="loading-spinner"></div>
+          <p id="loadingText" style="color: white; margin-top: 20px; font-size: 16px;">Loading Component...</p>
+          <div id="loadingProgressBar" style="width: 300px; height: 8px; background: rgba(255,255,255,0.2); border-radius: 4px; margin-top: 15px; overflow: hidden; display: none;">
+            <div id="loadingProgressFill" style="height: 100%; background: linear-gradient(90deg, #4CAF50, #45a049); width: 0%; transition: width 0.3s ease;"></div>
+          </div>
+          <p id="loadingPercentage" style="color: rgba(255,255,255,0.8); margin-top: 10px; font-size: 14px; display: none;">0%</p>
+        </div>
+      </div>
+
+      <div class="header">
+        <div class="logo">
+          <svg width="32" height="32" viewBox="0 0 100 100">
+            <rect width="100" height="100" rx="20" fill="#27ae60"/>
+            <text x="50" y="65" font-size="40" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-weight="bold">T</text>
+          </svg>
+          <span>TAA Simulator</span>
+        </div>
+        <div class="control-panel">
+          <button class="btn btn-danger" onclick="eraseAll()">🗑️ Clear All</button>
+          <button class="btn btn-danger" onclick="deleteSelected()" title="Delete (Del)">🗑️ Delete</button>
+          <button class="btn btn-warning" onclick="disconnectSelected()" title="Disconnect (X)">🔗 Disconnect</button>
+          
+          <button id="manualConnectionHeaderBtn" class="btn btn-manual-connection" title="Show/Hide Manual Connection Instructions">
+            🏠 Manual Connection
+          </button>
+
+          <button id="saveRobotBtn" class="btn btn-save">💾 Save Robot</button>
+          <button id="loadRobotBtn" class="btn btn-load" onclick="openProjectManager()">📂 Load Robot</button>
+          <button id="editCodeBtn" class="btn">📝 Edit Code</button>
+          <button id="startWiringBtn" class="btn btn-wiring">🔌 Start Wiring</button>
+          <button class="btn" onclick="undo()">↩️ Undo</button>
+          <button class="btn" onclick="redo()">↪️ Redo</button>
+          <button id="exportCircuitBtn" class="btn" onclick="showExportMenu(this)" title="Export circuit as PNG, JPG, PDF, or Schematic">
+            🖼️
+          </button>
+          <button id="logoutBtn" class="btn btn-danger">🚪 Logout</button>
+        </div>
+      </div>
+
+      <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+      
+      <div class="selection-indicator" id="selectionIndicator">
+        No component selected
+      </div>
+
+      <!-- Right Side Controls Container -->
+      <div class="right-controls-container">
+
+        <!-- Wire Properties Panel -->
+        <div id="wirePropertiesPanel">
+          <div class="wire-properties-header">
+            <h3>🔌 Wire Properties</h3>
+          </div>
+
+          <!-- Wire Color -->
+          <div class="wire-properties-section">
+            <label class="wire-properties-label">Wire Color</label>
+            <div class="wire-color-input-group">
+              <input type="color" id="wireColorPicker" value="#FF6600"/>
+              <div id="wireColorPreview"></div>
+            </div>
+          </div>
+
+          <!-- Color Presets -->
+          <div class="wire-properties-section">
+            <label class="wire-properties-label-small">Quick Colors</label>
+            <div class="wire-color-presets">
+              <button class="wire-color-preset" data-color="#FF0000" title="Power (Red)" onclick="setPresetColor('#FF0000')"></button>
+              <button class="wire-color-preset" data-color="#000000" title="Ground (Black)" onclick="setPresetColor('#000000')"></button>
+              <button class="wire-color-preset" data-color="#FF6600" title="Signal (Orange)" onclick="setPresetColor('#FF6600')"></button>
+              <button class="wire-color-preset" data-color="#0066FF" title="Data (Blue)" onclick="setPresetColor('#0066FF')"></button>
+              <button class="wire-color-preset" data-color="#00FF00" title="Analog (Green)" onclick="setPresetColor('#00FF00')"></button>
+              <button class="wire-color-preset" data-color="#FFFF00" title="Yellow" onclick="setPresetColor('#FFFF00')"></button>
+            </div>
+          </div>
+
+          <!-- Wire Thickness -->
+          <div class="wire-properties-section">
+            <label class="wire-thickness-label">
+              <span>Wire Thickness</span>
+              <span id="wireThicknessValue">0.05</span>
+            </label>
+            <input type="range" id="wireThicknessSlider" min="0.02" max="0.15" step="0.01" value="0.05"/>
+            <div class="wire-thickness-labels">
+              <span>Thin</span>
+              <span>Thick</span>
+            </div>
+          </div>
+
+          <!-- Thickness Preview -->
+          <div class="wire-properties-section">
+            <label class="wire-properties-label-small">Preview</label>
+            <div class="wire-preview-container">
+              <div id="wireThicknessPreview"></div>
+            </div>
+          </div>
+
+          <!-- Apply Button -->
+          <button id="applyWirePropsBtn">Apply to Selected Wire</button>
+        </div>
+
+        <!-- View Controls Panel -->
+        <div id="viewControlsPanel">
+          <h4 class="view-controls-header">
+            <span class="view-controls-header-title">
+              <span>🎬</span> View Controls
+            </span>
+            <button class="minimize-btn" onclick="toggleMinimizePanel('viewControlsPanel', 'viewControlsContent')" title="Minimize">▼</button>
+          </h4>
+          <div id="viewControlsContent">
+          <!-- Camera Views -->
+          <div class="view-controls-section">
+            <label class="view-controls-label">Camera Angle</label>
+            <div class="view-controls-grid">
+              <button id="btn-view-top" class="view-btn"><span>↑</span> Top</button>
+              <button id="btn-view-left" class="view-btn"><span>←</span> Left</button>
+              <button id="btn-view-right" class="view-btn"><span>→</span> Right</button>
+              <button id="btn-reset-view" class="view-btn reset"><span>↻</span> Reset</button>
+            </div>
+          </div>
+
+          <!-- Zoom Controls -->
+          <div class="view-controls-section">
+            <label class="view-controls-label">Zoom</label>
+            <div class="view-controls-row">
+              <button id="btn-zoom-in" class="zoom-btn">🔍+ In</button>
+              <button id="btn-zoom-out" class="zoom-btn">🔍- Out</button>
+            </div>
+          </div>
+
+          <!-- Theme Toggle -->
+          <div class="theme-switch-container">
+            <label for="themeSwitcher" class="theme-switch-label">
+              <span class="theme-switch-text">Dark Mode</span>
+              <div class="theme-switch-wrapper">
+                <input type="checkbox" id="themeSwitcher"/>
+                <div id="themeToggleSlider">
+                  <div id="themeToggleButton">☀️</div>
+                </div>
+              </div>
+            </label>
+          </div>
+          </div>
+        </div>
+
+        <!-- Component Properties Panel -->
+        <div id="componentPropertiesPanel">
+          <div class="component-properties-header">
+            <h3>⚙️ Component Properties</h3>
+            <div class="component-properties-actions">
+              <button class="minimize-btn" onclick="toggleMinimizePanel('componentPropertiesPanel', 'propertiesContent')" title="Minimize">▼</button>
+              <button class="close-properties-btn" onclick="closePropertiesPanel()">×</button>
+            </div>
+          </div>
+          
+          <div id="propertiesContent">
+            <p class="properties-empty">Select a component to edit properties</p>
+          </div>
+          
+          <button onclick="applyComponentProperties()" id="applyPropertiesBtn">Apply Changes</button>
+        </div>
+      </div>
+
+      <!-- Side Panel -->
+      <div class="side-panel" id="sidePanel">
+        <div class="panel-header">
+          <div class="panel-title">Component Library</div>
+          <div class="panel-subtitle" id="kitSubtitle">Loading kit information...</div>
+        </div>
+        <div class="components-grid" id="componentsGrid">
+          <div style="padding: 20px; text-align: center; color: #666;">
+            <p>Loading components...</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Project Manager Modal -->
+      <div class="project-manager-modal" id="projectManagerModal">
+        <div class="project-manager-content">
+          <div class="project-manager-header">
+            <h2>📂 Project Manager</h2>
+            <button class="close-btn" onclick="closeProjectManager()">✕</button>
+          </div>
+          <div class="project-manager-body">
+            <div class="projects-section">
+              <h3>Your Saved Projects</h3>
+              <div class="projects-list" id="projectsList">
+                <div class="loading-projects">Loading projects...</div>
+              </div>
+            </div>
+            <div class="project-actions">
+              <button class="btn btn-primary" onclick="createNewProject()">➕ New Project</button>
+              <button class="btn btn-secondary" onclick="refreshProjects()">🔄 Refresh</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- Render Canvas -->
+      <canvas id="renderCanvas"></canvas>
+    </div>
+
+    <!-- Code Editor Panel -->
+    <div class="code-editor-panel" id="codeEditorPanel">
+      <div class="code-editor-header">
+        <h2 class="code-editor-title">📝 Arduino Code Editor</h2>
+        <button class="code-editor-close" id="closeCodeEditor">✕ Close</button>
+      </div>
+      <div class="code-editor-body">
+        
+
+        
+        <!-- Hidden textarea for compatibility -->
+        <textarea id="arduinoCode" style="display:none;">void setup() {
+}
+void loop() {
+}</textarea>
+
+        <!-- Monaco Editor Container with Controls -->
+        <div style="margin-bottom: 10px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+          <button id="toggleLineNumbersBtn" class="btn" style="padding: 6px 12px; font-size: 12px;" title="Toggle line numbers">📊 Line Numbers</button>
+          <button id="formatCodeBtn" class="btn" style="padding: 6px 12px; font-size: 12px;" title="Format code (Alt+Shift+F)">✨ Format Code</button>
+          <span id="autoSaveIndicator" style="font-size: 11px; color: #666; margin-left: auto;">💾 Auto-saving...</span>
+        </div>
+        <div id="arduinoCodeContainer" style="height: 400px; min-height: 300px; border: 1px solid var(--border); border-radius: 6px; margin-bottom: 15px; background: #1e1e1e;"></div>
+
+        <!-- Simulation Control Buttons -->
+        <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+            <button class="compile-button" id="runCodeBtn" style="background: var(--success);">▶️ Run</button>
+            <button class="compile-button" id="pauseCodeBtn" style="background: var(--secondary);" disabled>⏸️ Pause</button>
+            <button class="compile-button" id="resetSimulatorBtn" style="background: #6c757d;">🔄 Reset</button>
+            <button class="compile-button" id="generateCodeBtn" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);" onclick="if(typeof window.generateArduinoCode === 'function') { window.generateArduinoCode(); } else { alert('Code generation not available'); }">🤖 Generate Code</button>
+                    <!-- NEW: Load Example Code Section (Moved Here) -->
+        <div style="margin-bottom: 15px; padding: 15px; background: rgba(30,30,30,0.95); border-radius: 12px; border: 2px solid rgba(52,152,219,0.3);">
+            <label style="display: block; margin-bottom: 10px; font-weight: 600; font-size: 14px; color: #3498db; display: flex; align-items: center; gap: 8px;">
+                <span>📚</span> Load Example Code
+            </label>
+            <select id="exampleSelect" style="padding: 10px; width: 100%; background: #1e1e1e; color: white; border: 1px solid #3498db; border-radius: 6px; font-size: 13px; cursor: pointer; transition: all 0.2s;">
+                <option value="">— Select an example —</option>
+                <option value="blink">💡 Basic Blink (Simple)</option>
+                <option value="blink_with_serial">💡 Blink + Serial</option>
+                <option value="potentiometer_read">🎚️ Potentiometer Read</option>
+                <option value="button_control">🔘 Button Control</option>
+                <option value="analog_threshold">📊 Analog Threshold</option>
+                <option value="motor_control">⚙️ Motor Control</option>
+                <option value="robot_control">🤖 Full Robot</option>
+            </select>
+        </div>
+        </div>
+        
+        <!-- Compile/Run Output -->
+        <div class="compile-output" id="compileOutput">Ready to run your Arduino code...</div>
+        
+        <!-- Upload Section -->
+        <div style="margin-top: 15px; padding: 15px; background: rgba(30,30,30,0.9); border-radius: 12px; color: white;">
+            <label style="display: block; margin-bottom: 8px; font-weight: 600;">🔌 Select Arduino Port:</label>
+            <select id="portSelect" style="padding: 8px; width: 100%; background: #1e1e1e; color: white; border: 1px solid #3e3e42; border-radius: 6px; margin-bottom: 10px;">
+                <option value="">— Refresh Ports —</option>
+            </select>
+            <button class="compile-button" id="uploadCodeBtn" style="background: #e67e22; width: 100%;">
+                🚀 Upload to Arduino
+            </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+      <script type="module" src="/src/client/main.ts"></script>
+
+</body>
+</html>

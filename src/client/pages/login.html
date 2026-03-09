@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script type="module">
+
+  if (localStorage.getItem('token')) {
+    window.location.href = '/src/client/pages/landing.html';
+  }
+</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TAA Simulator - Login</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Local CSS - Fixed Path -->
+  <link rel="stylesheet" href="../css/login_design.css">
+  
+</head>
+<body>
+  <div class="auth-container">
+    <div class="logo">🔐</div>
+    <h2>Welcome Back</h2>
+    <p class="subtitle">Sign in to your TAA Simulator account</p>
+    
+    <form id="login-form">
+      <div class="form-group">
+        <label for="emailOrUsername">Email or Username</label>
+        <div class="input-wrapper">
+          <input type="text" id="emailOrUsername" name="emailOrUsername" placeholder="Enter your email or username" required>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div class="password-wrapper">
+          <input type="password" id="password" name="password" placeholder="Enter your password" required>
+          <span class="toggle-password" onclick="toggleVisibility('password')">👁️</span>
+        </div>
+      </div>
+      
+      <button type="submit">Sign In</button>
+    </form>
+    
+    <div class="auth-links">
+      <!-- FIXED: Corrected path to sign_up.html -->
+      <p>Don't have an account? <a href="sign_up.html">Create Account</a></p>
+    </div>
+  </div>
+
+  <!-- Local JS Files - Fixed Paths -->
+  <script type="module" src="../scripts/login-handler.ts"></script>
+</body>
+</html>
